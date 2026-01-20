@@ -2,10 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 视口设置：禁止缩放，适配刘海屏，锁定宽高等比 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>小小里程师：云南路线大挑战</title>
-    <meta name="description" content="一个适配三年级学生的数学里程问题互动小游戏">
+    <title>小小里程师：云南大挑战</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
@@ -17,486 +15,424 @@
             --grass-bottom: #16a34a;
         }
 
-        /* 全局布局与背景设置 */
         html, body {
             margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
             font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
-            background: linear-gradient(180deg, 
-                var(--sky-top) 0%, 
-                var(--sky-bottom) 45%, 
-                #ffffff 45%, 
-                #ffffff 50%, 
-                var(--grass-top) 50%, 
-                var(--grass-bottom) 100%
-            );
-            background-attachment: fixed;
-            touch-action: none; /* 禁止系统级手势 */
+            background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 45%, #ffffff 45%, #ffffff 50%, var(--grass-top) 50%, var(--grass-bottom) 100%);
+            touch-action: none; 
             -webkit-user-select: none;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- 动画背景元素 --- */
         .cloud {
-            position: absolute; background: white; border-radius: 100px; opacity: 0.8;
-            filter: blur(2px); z-index: 1; animation: cloud-move infinite linear;
-        }
-        .cloud::after, .cloud::before { content: ''; position: absolute; background: white; border-radius: 50%; }
-        .cloud::after { width: 60%; height: 150%; top: -60%; left: 15%; }
-        .cloud::before { width: 50%; height: 120%; top: -40%; left: 40%; }
-        @keyframes cloud-move {
-            from { transform: translateX(-250px); }
-            to { transform: translateX(calc(100vw + 250px)); }
+            position: absolute; background: white; border-radius: 100px; opacity: 0.6;
+            filter: blur(2px); z-index: 1; pointer-events: none;
         }
 
-        /* --- 头部样式 --- */
         .header-bg {
             background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
             padding: 15px; padding-top: calc(15px + env(safe-area-inset-top));
             border-bottom: 4px solid rgba(255,255,255,0.5); position: relative; z-index: 100;
         }
 
-        /* --- 地图核心区域 --- */
         .route-map {
-            position: relative; width: 94%; height: 220px; margin: 20px auto;
+            position: relative; width: 92%; height: 180px; margin: 15px auto;
             background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px);
-            border-radius: 35px; border: 6px solid white; display: flex;
-            align-items: center; padding: 0 50px; z-index: 10;
+            border-radius: 30px; border: 5px solid white; display: flex;
+            align-items: center; padding: 0 40px; z-index: 10;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .road-line { position: absolute; height: 16px; background: rgba(0, 0, 0, 0.1); border-radius: 20px; width: calc(100% - 100px); left: 50px; }
-        .road-progress { position: absolute; height: 16px; background: linear-gradient(90deg, #fcd34d, #f59e0b); border-radius: 20px; width: 0%; left: 50px; z-index: 2; transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+        .road-line { position: absolute; height: 12px; background: rgba(0, 0, 0, 0.1); border-radius: 20px; width: calc(100% - 80px); left: 40px; }
+        .road-progress { position: absolute; height: 12px; background: linear-gradient(90deg, #fcd34d, #f59e0b); border-radius: 20px; width: 0%; left: 40px; z-index: 2; transition: width 0.3s ease-out; }
 
-        /* 巴士样式 */
         #bus {
-            position: absolute; width: 110px; height: 75px; z-index: 50; top: 50%;
-            transform: translate(-50%, -90%); filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
-            cursor: grab;
-            touch-action: none;
-            user-select: none;
-            /* 默认带有过渡效果，拖拽时通过JS移除 */
-            transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            position: absolute; width: 100px; height: 80px; z-index: 50; top: 50%;
+            transform: translate(-50%, -85%); filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
+            cursor: grab; touch-action: none;
+            will-change: left;
         }
-        #bus:active { cursor: grabbing; }
 
         .signboard {
             position: absolute; background: #22c55e; color: white; padding: 4px 12px;
-            border-radius: 12px; font-size: 13px; bottom: 120%; left: 50%;
+            border-radius: 12px; font-size: 13px; bottom: 105%; left: 50%;
             transform: translateX(-50%); white-space: nowrap; box-shadow: 0 4px 0 #16a34a;
-            pointer-events: none;
+            pointer-events: none; border: 2px solid white;
         }
 
-        /* 城市节点 */
         .city-node { position: absolute; z-index: 20; display: flex; flex-direction: column; align-items: center; transform: translateX(-50%); pointer-events: none;}
-        .city-pin { width: 12px; height: 12px; background: white; border: 3px solid #3b82f6; border-radius: 50%; }
-        .city-name { margin-top: 8px; font-size: 12px; font-weight: 900; color: #1e3a8a; background: rgba(255,255,255,0.9); padding: 1px 6px; border-radius: 8px; }
+        .city-pin { width: 12px; height: 12px; background: white; border: 3px solid #3b82f6; border-radius: 50%; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .city-node.highlight .city-pin { transform: scale(1.8); background: #fcd34d; border-color: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); }
+        .city-name { margin-top: 8px; font-size: 11px; font-weight: 900; color: #1e3a8a; background: rgba(255,255,255,0.9); padding: 2px 6px; border-radius: 6px; white-space: nowrap; border: 1px solid #bfdbfe;}
 
-        /* --- 任务卡片 --- */
         .task-card {
             background: white; border-radius: 25px; padding: 20px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.1); display: none;
-            width: 90%; max-width: 380px; margin-top: 10px; z-index: 50;
+            width: 90%; max-width: 350px; margin: 10px auto; z-index: 50;
+            position: relative;
         }
         .task-card.active { display: block; animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes pop-in { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .error-box {
+            background: #fff7ed; border: 2px solid #fed7aa; color: #ea580c;
+            padding: 10px; border-radius: 12px; font-size: 13px;
+            margin-top: 12px; display: none; align-items: center; gap: 8px;
+        }
+        .error-box.show { display: flex; animation: shake 0.4s; }
 
-        .btn-submit { background: #f97316; color: white; padding: 10px 20px; border-radius: 12px; font-weight: bold; box-shadow: 0 4px 0 #c2410c; }
+        .btn-submit { 
+            background: #f97316; color: white; padding: 14px; border-radius: 16px; 
+            font-weight: bold; box-shadow: 0 4px 0 #c2410c; width: 100%;
+            transition: all 0.1s;
+        }
         .btn-submit:active { transform: translateY(2px); box-shadow: 0 2px 0 #c2410c; }
 
-        /* --- 反馈弹窗与特效 --- */
         .success-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
             display: none; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 1000; backdrop-filter: blur(4px);
+            z-index: 1000; backdrop-filter: blur(6px);
         }
-        .success-overlay.show { display: flex; }
+        .success-overlay.show { display: flex; animation: fade-in 0.3s ease; }
 
         #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1100; }
 
-        .step-dot { width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; transition: all 0.3s; }
-        .step-dot.active { background: #3b82f6; transform: scale(1.4); }
-        .step-dot.done { background: #22c55e; }
-
         #music-toggle {
-            position: fixed; bottom: 30px; right: 30px; z-index: 2000;
+            position: fixed; bottom: 20px; right: 20px; z-index: 2000;
             background: white; width: 50px; height: 50px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 6px 15px rgba(0,0,0,0.2); cursor: pointer;
             font-size: 24px; border: 3px solid #3b82f6;
-            transition: transform 0.2s;
         }
-        #music-toggle:active { transform: scale(0.9); }
+
+        @keyframes pop-in { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-8px)} 80%{transform:translateX(8px)} }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<!-- 点击页面任意位置尝试唤醒音频上下文 -->
-<body onclick="forceStartAudio()">
+<body>
 
-    <!-- 粒子画布 -->
     <canvas id="confetti-canvas"></canvas>
 
-    <!-- 音乐开关 -->
-    <div id="music-toggle" onclick="toggleMusic(event)">
+    <div id="music-toggle">
         <span id="music-icon">🔇</span>
     </div>
 
-    <!-- 云朵背景动画 -->
-    <div class="cloud" style="top: 10%; width: 150px; height: 45px; animation-duration: 45s; left: -10%;"></div>
-    <div class="cloud" style="top: 25%; width: 180px; height: 60px; animation-duration: 65s; animation-delay: -15s; left: 20%;"></div>
-
-    <!-- 顶部标题与进度 -->
     <div class="header-bg text-center">
-        <h1 class="text-xl font-black text-blue-600 tracking-wide">🚌 小小里程师：云南路线大挑战</h1>
-        <div class="flex justify-center gap-4 mt-2">
-            <div class="step-dot active" id="dot-1"></div>
-            <div class="step-dot" id="dot-2"></div>
+        <h1 class="text-lg font-black text-blue-600 tracking-wide">🚌 小小里程师：云南大挑战</h1>
+        <div class="flex justify-center gap-3 mt-2">
+            <div class="w-3 h-3 rounded-full bg-blue-600 transition-colors duration-500" id="dot-1"></div>
+            <div class="w-3 h-3 rounded-full bg-gray-200 transition-colors duration-500" id="dot-2"></div>
         </div>
     </div>
 
-    <!-- 地图区域 -->
     <div class="route-map" id="map-area">
         <div class="road-line"></div>
         <div class="road-progress" id="progress-bar"></div>
 
-        <!-- 城市坐标点 -->
-        <div class="city-node" style="left: 50px;"><div class="city-pin"></div><div class="city-name">昆明(0)</div></div>
-        <div class="city-node" style="left: 33.5%;"><div class="city-pin"></div><div class="city-name">楚雄(152)</div></div>
-        <div class="city-node" style="left: 67%;"><div class="city-pin"></div><div class="city-name">大理(328)</div></div>
-        <div class="city-node" style="left: calc(100% - 50px);"><div class="city-pin"></div><div class="city-name">丽江(524)</div></div>
+        <div class="city-node" id="node-0" style="left: 40px;"><div class="city-pin"></div><div class="city-name">昆明(0)</div></div>
+        <div class="city-node" id="node-1" style="left: 33.5%;"><div class="city-pin"></div><div class="city-name">楚雄(152)</div></div>
+        <div class="city-node" id="node-2" style="left: 67%;"><div class="city-pin"></div><div class="city-name">大理(328)</div></div>
+        <div class="city-node" id="node-3" style="left: calc(100% - 40px);"><div class="city-pin"></div><div class="city-name">丽江(524)</div></div>
 
-        <!-- 可拖拽巴士 -->
-        <div id="bus" style="left: 50px;">
+        <div id="bus" style="left: 40px;">
             <div class="signboard" id="bus-sign">里程：0 km</div>
             <svg viewBox="0 0 110 70">
                 <rect x="5" y="12" width="100" height="42" rx="10" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2"/>
                 <rect x="15" y="18" width="22" height="16" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1"/>
                 <rect x="42" y="18" width="22" height="16" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1"/>
                 <rect x="74" y="18" width="20" height="16" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1"/>
-                
-                <!-- 乘客与司机细节 -->
-                <g transform="translate(18, 20)">
-                    <circle cx="8" cy="8" r="5" fill="#fca5a5"/>
-                    <path d="M3 5 Q8 0 13 5" fill="#4ade80" />
-                    <circle cx="6" cy="7" r="0.6" fill="#000"/>
-                    <circle cx="10" cy="7" r="0.6" fill="#000"/>
-                </g>
-                <g transform="translate(46, 20)">
-                    <circle cx="8" cy="8" r="5" fill="#fcd34d"/>
-                    <path d="M3 8 Q8 2 13 8" fill="#ec4899" />
-                    <circle cx="6" cy="8" r="0.6" fill="#000"/>
-                    <circle cx="10" cy="8" r="0.6" fill="#000"/>
-                </g>
-                <g transform="translate(77, 19)">
-                    <circle cx="7" cy="7" r="4.5" fill="#fdba74"/> 
-                    <path d="M1 5 Q7 1 13 5" fill="#1e3a8a" />
-                    <circle cx="9" cy="6.5" r="0.8" fill="#1e293b"/>
-                    <path d="M6 9 Q7.5 10 9 9" fill="none" stroke="#be123c" stroke-width="0.8"/>
-                </g>
-
+                <g transform="translate(18, 20)"><circle cx="8" cy="8" r="5" fill="#fca5a5"/><circle cx="6" cy="7" r="0.6" fill="#000"/><circle cx="10" cy="7" r="0.6" fill="#000"/></g>
+                <g transform="translate(46, 20)"><circle cx="8" cy="8" r="5" fill="#fcd34d"/><circle cx="6" cy="8" r="0.6" fill="#000"/><circle cx="10" cy="8" r="0.6" fill="#000"/></g>
                 <circle cx="28" cy="54" r="9" fill="#1e293b" /><circle cx="28" cy="54" r="4" fill="#94a3b8" />
                 <circle cx="82" cy="54" r="9" fill="#1e293b" /><circle cx="82" cy="54" r="4" fill="#94a3b8" />
             </svg>
         </div>
     </div>
 
-    <!-- 任务区域 -->
-    <main class="flex flex-col items-center">
-        <!-- 任务 1 -->
+    <main class="flex flex-col items-center px-4 relative mt-4">
         <div class="task-card active" id="card-1">
-            <h2 class="font-black text-blue-600 mb-2 text-lg">第一关：路程挑战</h2>
-            <p class="text-gray-600 mb-4">从【楚雄】到【大理】要开多少公里？<br><span class="text-xs text-blue-400">提示：328 - 152 = ?</span></p>
-            <div class="flex gap-3">
-                <input type="number" id="input-1" placeholder="???" autocomplete="off" class="flex-1 bg-blue-50 border-2 border-blue-100 rounded-xl px-4 py-2 text-xl font-bold text-center focus:outline-none focus:border-blue-400">
-                <button onclick="checkAnswer(1, 176)" class="btn-submit">验证</button>
+            <h2 class="font-black text-blue-600 mb-1 text-base">第一关：路程挑战</h2>
+            <p class="text-sm text-gray-600 mb-4 font-bold">从【楚雄】到【大理】要开多少公里？</p>
+            <div class="input-group flex flex-col gap-3">
+                <input type="number" id="input-1" inputmode="numeric" placeholder="填入数字" class="bg-blue-50 border-2 border-blue-100 rounded-xl px-4 py-3 text-xl font-bold text-center focus:outline-none focus:border-blue-400">
+                <button id="submit-1" class="btn-submit text-lg">确 认</button>
             </div>
+            <div id="feedback-1" class="error-box"><span>⚠️</span><span>加油！再算算看吧 (328-152)</span></div>
         </div>
 
-        <!-- 任务 2 -->
         <div class="task-card" id="card-2">
-            <h2 class="font-black text-blue-600 mb-2 text-lg">第二关：终点挑战</h2>
-            <p class="text-gray-600 mb-4">从【大理】到【丽江】要开多少公里？<br><span class="text-xs text-blue-400">提示：524 - 328 = ?</span></p>
-            <div class="flex gap-3">
-                <input type="number" id="input-2" placeholder="???" autocomplete="off" class="flex-1 bg-blue-50 border-2 border-blue-100 rounded-xl px-4 py-2 text-xl font-bold text-center focus:outline-none focus:border-blue-400">
-                <button onclick="checkAnswer(2, 196)" class="btn-submit">验证</button>
+            <h2 class="font-black text-blue-600 mb-1 text-base">第二关：终点挑战</h2>
+            <p class="text-sm text-gray-600 mb-4 font-bold">从【大理】到【丽江】要开多少公里？</p>
+            <div class="input-group flex flex-col gap-3">
+                <input type="number" id="input-2" inputmode="numeric" placeholder="填入数字" class="bg-blue-50 border-2 border-blue-100 rounded-xl px-4 py-3 text-xl font-bold text-center focus:outline-none focus:border-blue-400">
+                <button id="submit-2" class="btn-submit text-lg">确 认</button>
             </div>
+            <div id="feedback-2" class="error-box"><span>⚠️</span><span>差一点点就对啦！(524-328)</span></div>
         </div>
     </main>
 
-    <!-- 成功弹窗 -->
     <div id="success-overlay" class="success-overlay">
-        <div class="bg-white p-8 rounded-3xl text-center shadow-2xl mx-4 max-w-sm relative">
-            <div class="mb-4 inline-block transform scale-125">🏆</div>
-            <h1 class="text-blue-600 text-3xl font-black mb-2">太棒了！</h1>
-            <p id="reward-text" class="text-gray-600 mb-8 font-bold"></p>
-            <button id="overlay-btn" class="bg-blue-600 text-white px-10 py-3 rounded-full font-black text-lg shadow-lg active:scale-95 w-full">
-                继续前进 ➔
-            </button>
+        <div class="bg-white p-6 rounded-3xl text-center shadow-2xl mx-6 max-w-sm">
+            <h1 class="text-blue-600 text-2xl font-black mb-2">🎉 太棒了！</h1>
+            <p id="reward-text" class="text-gray-600 mb-6 font-bold leading-relaxed"></p>
+            <button id="overlay-btn" class="bg-blue-600 text-white px-8 py-3 rounded-full font-black text-lg shadow-lg active:scale-95 w-full">继续前进 ➔</button>
         </div>
     </div>
 
     <script>
-        // --- 游戏状态 ---
-        const state = {
+        // 使用更具唯一性的名称防止 identifier 冲突
+        const APP_STATE = {
             level: 1,
             totalKm: 524,
-            audioInited: false,
-            musicPlaying: true, // 默认开启
-            isDraggingBus: false,
-            bgmLoopId: null
+            isAudioInited: false,
+            musicPlaying: false,
+            isDragging: false,
+            lastVisitedNode: -1,
+            bgmTimeout: null,
+            audioCtx: null,
+            masterGain: null,
+            melodyIndex: 0
         };
 
-        // --- 音频系统 (8-bit 风格) ---
-        let audioCtx, masterGain;
-        const melody = [261, 329, 392, 523, 392, 329, 440, 392]; // C4-E4-G4-C5 循环
+        const DOM_ELEMENTS = {
+            bus: document.getElementById('bus'),
+            mapArea: document.getElementById('map-area'),
+            progressBar: document.getElementById('progress-bar'),
+            busSign: document.getElementById('bus-sign'),
+            musicIcon: document.getElementById('music-icon'),
+            overlay: document.getElementById('success-overlay')
+        };
 
-        function forceStartAudio() {
-            if (!state.audioInited) {
-                initAudio();
-            } else if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
+        // 修改变量名以防止报错
+        const NOTE_FREQS = {
+            C4: 261.63, CS4: 277.18, D4: 293.66, DS4: 311.13, E4: 329.63, F4: 349.23, FS4: 369.99, G4: 392.00, GS4: 415.30, A4: 440.00, AS4: 466.16, B4: 493.88,
+            C5: 523.25, CS5: 554.37, D5: 587.33, DS5: 622.25, E5: 659.25, F5: 698.46, FS5: 739.99, G5: 783.99, GS5: 830.61, A5: 880.00, AS5: 932.33, B5: 987.77,
+            G4_LOW: 392.00, G5_HI: 783.99, C6: 1046.50
+        };
 
-        function initAudio() {
+        const MARIO_MELODY = [
+            // 开场
+            { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 50 }, { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 150 }, 
+            { f: NOTE_FREQS.C5, d: 150 }, { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.G5, d: 150 }, { f: 0, d: 450 }, { f: NOTE_FREQS.G4, d: 150 }, { f: 0, d: 450 },
+            // A段
+            { f: NOTE_FREQS.C5, d: 150 }, { f: 0, d: 300 }, { f: NOTE_FREQS.G4, d: 150 }, { f: 0, d: 300 }, { f: NOTE_FREQS.E4, d: 150 }, { f: 0, d: 300 }, 
+            { f: NOTE_FREQS.A4, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.B4, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.AS4, d: 150 }, { f: NOTE_FREQS.A4, d: 150 }, { f: 0, d: 150 },
+            { f: NOTE_FREQS.G4, d: 100 }, { f: NOTE_FREQS.E5, d: 100 }, { f: NOTE_FREQS.G5, d: 100 }, { f: NOTE_FREQS.A5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.F5, d: 150 }, { f: NOTE_FREQS.G5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.C5, d: 150 }, { f: NOTE_FREQS.D5, d: 150 }, { f: NOTE_FREQS.B4, d: 150 }, { f: 0, d: 300 }
+        ];
+
+        function initAudioEngine() {
+            if (APP_STATE.isAudioInited) return;
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                
-                audioCtx = new AudioContext();
-                masterGain = audioCtx.createGain();
-                masterGain.connect(audioCtx.destination);
-                masterGain.gain.value = 0.3; // 适当音量
-                
-                state.audioInited = true;
-                if (state.musicPlaying) {
-                    document.getElementById('music-icon').innerText = '🎵';
-                    startBGM();
+                APP_STATE.audioCtx = new AudioContext();
+                APP_STATE.masterGain = APP_STATE.audioCtx.createGain();
+                APP_STATE.masterGain.connect(APP_STATE.audioCtx.destination);
+                APP_STATE.masterGain.gain.value = 0.15;
+                APP_STATE.isAudioInited = true;
+                APP_STATE.musicPlaying = true;
+                DOM_ELEMENTS.musicIcon.innerText = '🎵';
+                runBGM();
+            } catch (e) { console.error("音频启动失败", e); }
+        }
+
+        function playSynthTone(freq, duration, volume = 0.1) {
+            if (!APP_STATE.isAudioInited || APP_STATE.audioCtx.state === 'suspended' || freq === 0) return;
+            const osc = APP_STATE.audioCtx.createOscillator();
+            const g = APP_STATE.audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(freq, APP_STATE.audioCtx.currentTime);
+            
+            g.gain.setValueAtTime(volume, APP_STATE.audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.0001, APP_STATE.audioCtx.currentTime + (duration/1000));
+            
+            osc.connect(g);
+            g.connect(APP_STATE.masterGain);
+            osc.start();
+            osc.stop(APP_STATE.audioCtx.currentTime + (duration/1000));
+        }
+
+        function playCoinEffect() {
+            playSynthTone(987, 100, 0.2);
+            setTimeout(() => playSynthTone(1318, 300, 0.2), 80);
+        }
+
+        function runBGM() {
+            if (APP_STATE.bgmTimeout) clearTimeout(APP_STATE.bgmTimeout);
+            
+            const next = () => {
+                if (APP_STATE.musicPlaying && APP_STATE.isAudioInited) {
+                    const note = MARIO_MELODY[APP_STATE.melodyIndex];
+                    if (note.f > 0) {
+                        playSynthTone(note.f, note.d, 0.08);
+                    }
+                    APP_STATE.melodyIndex = (APP_STATE.melodyIndex + 1) % MARIO_MELODY.length;
+                    APP_STATE.bgmTimeout = setTimeout(next, note.d);
+                } else {
+                    APP_STATE.bgmTimeout = setTimeout(next, 500);
                 }
-            } catch (e) {
-                console.error("Audio init failed", e);
+            };
+            next();
+        }
+
+        function getLayout() {
+            const rect = DOM_ELEMENTS.mapArea.getBoundingClientRect();
+            const padding = 40;
+            const roadWidth = rect.width - (padding * 2);
+            return { rect, padding, roadWidth };
+        }
+
+        function refreshUI(clientX) {
+            const { rect, padding, roadWidth } = getLayout();
+            let x = clientX - rect.left;
+            x = Math.max(padding, Math.min(x, rect.width - padding));
+
+            DOM_ELEMENTS.bus.style.left = x + 'px';
+            const progress = (x - padding) / roadWidth;
+            DOM_ELEMENTS.progressBar.style.width = (progress * 100) + '%';
+            DOM_ELEMENTS.busSign.innerText = `里程：${Math.round(progress * APP_STATE.totalKm)} km`;
+
+            const nodes = [0, 0.335, 0.67, 1.0];
+            let activeId = -1;
+            nodes.forEach((pos, i) => {
+                const nodeX = padding + pos * roadWidth;
+                const dist = Math.abs(x - nodeX);
+                const el = document.getElementById(`node-${i}`);
+                if (dist < 15) {
+                    el.classList.add('highlight');
+                    activeId = i;
+                } else {
+                    el.classList.remove('highlight');
+                }
+            });
+
+            if (activeId !== -1 && activeId !== APP_STATE.lastVisitedNode) {
+                playCoinEffect();
+                APP_STATE.lastVisitedNode = activeId;
+            } else if (activeId === -1) {
+                APP_STATE.lastVisitedNode = -1;
             }
         }
 
-        function playTone(freq, type, duration, volume = 0.2) {
-            if (!audioCtx || audioCtx.state === 'suspended') return;
-            const osc = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            osc.type = type;
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            g.gain.setValueAtTime(volume, audioCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-            osc.connect(g);
-            g.connect(masterGain);
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
+        const onStart = (e) => {
+            initAudioEngine();
+            if (APP_STATE.audioCtx.state === 'suspended') APP_STATE.audioCtx.resume();
+            APP_STATE.isDragging = true;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            refreshUI(clientX);
+        };
+
+        const onMove = (e) => {
+            if (!APP_STATE.isDragging) return;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            requestAnimationFrame(() => refreshUI(clientX));
+            if (e.cancelable) e.preventDefault();
+        };
+
+        DOM_ELEMENTS.bus.addEventListener('mousedown', onStart);
+        DOM_ELEMENTS.bus.addEventListener('touchstart', onStart, { passive: false });
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('touchmove', onMove, { passive: false });
+        window.addEventListener('mouseup', () => APP_STATE.isDragging = false);
+        window.addEventListener('touchend', () => APP_STATE.isDragging = false);
+
+        document.getElementById('music-toggle').onclick = (e) => {
+            e.stopPropagation();
+            initAudioEngine();
+            APP_STATE.musicPlaying = !APP_STATE.musicPlaying;
+            DOM_ELEMENTS.musicIcon.innerText = APP_STATE.musicPlaying ? '🎵' : '🔇';
+        };
+
+        function validate(lvl, correct) {
+            initAudioEngine();
+            const input = document.getElementById(`input-${lvl}`);
+            const feedback = document.getElementById(`feedback-${lvl}`);
+            const val = parseInt(input.value);
+
+            if (val === correct) {
+                feedback.classList.remove('show');
+                playCoinEffect();
+                if (lvl === 1) {
+                    showDialog("第一阶段完成！巴士正在前往大理！");
+                    autoDrive(0.67);
+                } else {
+                    showDialog("终点抵达！你已经完成全部里程挑战！");
+                    autoDrive(1.0);
+                }
+            } else {
+                feedback.classList.add('show');
+            }
         }
 
-        function startBGM() {
-            if (state.bgmLoopId) clearTimeout(state.bgmLoopId);
-            let step = 0;
+        function autoDrive(ratio) {
+            const { padding, roadWidth } = getLayout();
+            const targetX = padding + (roadWidth * ratio) + DOM_ELEMENTS.mapArea.getBoundingClientRect().left;
+            DOM_ELEMENTS.bus.style.transition = 'left 1s cubic-bezier(0.25, 1, 0.5, 1)';
+            DOM_ELEMENTS.progressBar.style.transition = 'width 1s cubic-bezier(0.25, 1, 0.5, 1)';
+            refreshUI(targetX);
+            setTimeout(() => {
+                DOM_ELEMENTS.bus.style.transition = '';
+                DOM_ELEMENTS.progressBar.style.transition = '';
+            }, 1000);
+        }
+
+        function showDialog(msg) {
+            document.getElementById('reward-text').innerText = msg;
+            DOM_ELEMENTS.overlay.classList.add('show');
+            launchConfetti();
+        }
+
+        function reset() {
+            APP_STATE.level = 1;
+            APP_STATE.lastVisitedNode = -1;
+            document.getElementById('dot-1').classList.replace('bg-green-500', 'bg-blue-600');
+            document.getElementById('dot-2').classList.replace('bg-blue-600', 'bg-gray-200');
+            document.getElementById('card-1').classList.add('active');
+            document.getElementById('card-2').classList.remove('active');
+            document.getElementById('input-1').value = '';
+            document.getElementById('input-2').value = '';
+            autoDrive(0);
+            DOM_ELEMENTS.overlay.classList.remove('show');
+        }
+
+        document.getElementById('submit-1').onclick = () => validate(1, 176);
+        document.getElementById('submit-2').onclick = () => validate(2, 196);
+        document.getElementById('overlay-btn').onclick = () => {
+            if (APP_STATE.level === 1) {
+                APP_STATE.level = 2;
+                document.getElementById('dot-1').classList.replace('bg-blue-600', 'bg-green-500');
+                document.getElementById('dot-2').classList.replace('bg-gray-200', 'bg-blue-600');
+                document.getElementById('card-1').classList.remove('active');
+                document.getElementById('card-2').classList.add('active');
+                DOM_ELEMENTS.overlay.classList.remove('show');
+            } else {
+                reset();
+            }
+        };
+
+        function launchConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            let parts = Array.from({length: 60}, () => ({
+                x: canvas.width/2, y: canvas.height/2,
+                vx: (Math.random()-0.5)*20, vy: (Math.random()-0.5)*20-5,
+                s: Math.random()*10+5, c: `hsl(${Math.random()*360}, 80%, 60%)`,
+                l: 1
+            }));
             const loop = () => {
-                if (state.musicPlaying && audioCtx && audioCtx.state === 'running') {
-                    playTone(melody[step % melody.length], 'sine', 0.5, 0.05); // 柔和背景音
-                    step++;
-                }
-                state.bgmLoopId = setTimeout(loop, 450);
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                parts.forEach((p, i) => {
+                    p.vy += 0.3; p.x += p.vx; p.y += p.vy; p.l -= 0.015;
+                    ctx.fillStyle = p.c; ctx.globalAlpha = p.l;
+                    ctx.fillRect(p.x, p.y, p.s, p.s);
+                    if(p.l <= 0) parts.splice(i, 1);
+                });
+                if(parts.length > 0) requestAnimationFrame(loop);
             };
             loop();
         }
-
-        function toggleMusic(e) {
-            e.stopPropagation();
-            if (!state.audioInited) {
-                initAudio();
-                return;
-            }
-            state.musicPlaying = !state.musicPlaying;
-            document.getElementById('music-icon').innerText = state.musicPlaying ? '🎵' : '🔇';
-            
-            if (state.musicPlaying) {
-                if(audioCtx.state === 'suspended') audioCtx.resume();
-                startBGM();
-            }
-        }
-
-        // --- 拖拽与UI更新逻辑 ---
-        const bus = document.getElementById('bus');
-        const mapArea = document.getElementById('map-area');
-        const progressBar = document.getElementById('progress-bar');
-        const busSign = document.getElementById('bus-sign');
-
-        function updateBusUI(leftPx, skipTransition = false) {
-            const rect = mapArea.getBoundingClientRect();
-            const padding = 50;
-            const roadWidth = rect.width - (padding * 2);
-            
-            let x = Math.max(padding, Math.min(leftPx, rect.width - padding));
-            
-            // 拖动时禁用过渡，保证跟随；自动移动时启用过渡
-            if (skipTransition) {
-                bus.style.transition = 'none';
-                progressBar.style.transition = 'none';
-            } else {
-                bus.style.transition = 'left 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
-                progressBar.style.transition = 'width 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
-            }
-
-            bus.style.left = x + 'px';
-            let percent = ((x - padding) / roadWidth) * 100;
-            progressBar.style.width = percent + '%';
-            
-            let km = Math.round(state.totalKm * (percent / 100));
-            busSign.innerText = `里程：${km} km`;
-        }
-
-        // 绑定拖拽事件
-        bus.addEventListener('mousedown', startDrag);
-        bus.addEventListener('touchstart', startDrag, {passive: false});
-
-        function startDrag(e) {
-            forceStartAudio(); // 用户交互时尝试唤醒音频
-            state.isDraggingBus = true;
-            e.stopPropagation();
-        }
-
-        window.addEventListener('mousemove', drag);
-        window.addEventListener('touchmove', drag, {passive: false});
-
-        function drag(e) {
-            if (!state.isDraggingBus) return;
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const mapRect = mapArea.getBoundingClientRect();
-            updateBusUI(clientX - mapRect.left, true);
-            if(e.cancelable) e.preventDefault();
-        }
-
-        window.addEventListener('mouseup', stopDrag);
-        window.addEventListener('touchend', stopDrag);
-
-        function stopDrag() {
-            if (!state.isDraggingBus) return;
-            state.isDraggingBus = false;
-        }
-
-        // 窗口大小改变时重置 Canvas
-        window.addEventListener('resize', () => {
-            const canvas = document.getElementById('confetti-canvas');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // --- 游戏业务流程 ---
-        function checkAnswer(lvl, correct) {
-            forceStartAudio();
-            const input = document.getElementById(`input-${lvl}`);
-            const val = parseInt(input.value);
-            
-            if (val === correct) {
-                // 正确音效
-                playTone(880, 'square', 0.1, 0.1);
-                setTimeout(() => playTone(1320, 'square', 0.3, 0.1), 80);
-                
-                if (lvl === 1) {
-                    showOverlay("第一阶段完成！巴士正在前往大理！");
-                    moveToPercent(67); // 移动到大理
-                } else {
-                    showOverlay("终点抵达！你已经成为一名优秀的里程师！");
-                    moveToPercent(100); // 移动到丽江
-                    document.getElementById('overlay-btn').innerText = "重新挑战 ➔";
-                }
-            } else {
-                // 错误音效
-                playTone(150, 'sawtooth', 0.4, 0.15);
-                const card = document.getElementById(`card-${lvl}`);
-                card.style.animation = 'shake 0.4s';
-                setTimeout(() => card.style.animation = '', 400);
-            }
-        }
-
-        function moveToPercent(percent) {
-            const rect = mapArea.getBoundingClientRect();
-            const padding = 50;
-            const roadWidth = rect.width - (padding * 2);
-            const targetX = padding + (roadWidth * (percent / 100));
-            updateBusUI(targetX);
-        }
-
-        function showOverlay(msg) {
-            document.getElementById('reward-text').innerText = msg;
-            document.getElementById('success-overlay').classList.add('show');
-            createConfetti();
-        }
-
-        document.getElementById('overlay-btn').onclick = () => {
-            forceStartAudio();
-            document.getElementById('success-overlay').classList.remove('show');
-            if (state.level === 2) {
-                resetGame();
-            } else {
-                // 关卡切换到 2
-                document.getElementById(`dot-${state.level}`).classList.add('done');
-                document.getElementById(`card-${state.level}`).classList.remove('active');
-                state.level++;
-                document.getElementById(`dot-${state.level}`).classList.add('active');
-                document.getElementById(`card-${state.level}`).classList.add('active');
-            }
-        };
-
-        function resetGame() {
-            // 重置状态
-            state.level = 1;
-            document.getElementById('overlay-btn').innerText = "继续前进 ➔";
-            document.getElementById('input-1').value = "";
-            document.getElementById('input-2').value = "";
-            
-            // 重置点状进度
-            for(let i=1; i<=2; i++) {
-                document.getElementById(`dot-${i}`).classList.remove('active', 'done');
-                document.getElementById(`card-${i}`).classList.remove('active');
-            }
-            document.getElementById('dot-1').classList.add('active');
-            document.getElementById('card-1').classList.add('active');
-            
-            // 巴士归位 (需要等待一小段时间让 transition 生效或强制重绘，这里直接利用 updateUI 逻辑)
-            moveToPercent(0); 
-        }
-
-        // --- 撒花特效 ---
-        const canvas = document.getElementById('confetti-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        
-        function createConfetti() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles = [];
-            for (let i = 0; i < 80; i++) {
-                particles.push({
-                    x: canvas.width / 2, y: canvas.height / 2,
-                    vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15 - 5,
-                    size: Math.random() * 8 + 4,
-                    color: `hsl(${Math.random() * 360}, 80%, 60%)`,
-                    gravity: 0.3, life: 1.0
-                });
-            }
-            const anim = () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach((p, i) => {
-                    p.vy += p.gravity; p.x += p.vx; p.y += p.vy; p.life -= 0.015;
-                    ctx.globalAlpha = p.life; ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size/2, 0, Math.PI*2);
-                    ctx.fill();
-                    if (p.life <= 0) particles.splice(i, 1);
-                });
-                if (particles.length > 0) requestAnimationFrame(anim);
-            };
-            anim();
-        }
-
-        // 错误抖动动画样式
-        const s = document.createElement('style');
-        s.innerHTML = `@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }`;
-        document.head.appendChild(s);
     </script>
 </body>
 </html>
