@@ -1,0 +1,519 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.3">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="zh-CN"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 视口设置：禁止缩放，适配刘海屏，锁定宽高等比 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;小小里程师：云南路线大挑战&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="description" content="一个适配三年级学生的数学里程问题互动小游戏"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&amp;display=swap');</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>:root {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--sky-top: #0ea5e9;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--sky-bottom: #bae6fd;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--grass-top: #4ade80;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--grass-bottom: #16a34a;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 全局布局与背景设置 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>html, body {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-family: 'ZCOOL KuaiLe', cursive, sans-serif;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: linear-gradient(180deg,<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>var(--sky-top) 0%,<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>var(--sky-bottom) 45%,<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>#ffffff 45%,<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>#ffffff 50%,<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>var(--grass-top) 50%,<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>var(--grass-bottom) 100%</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-attachment: fixed;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>touch-action: none; /* 禁止系统级手势 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>-webkit-user-select: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>user-select: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* --- 动画背景元素 --- */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.cloud {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: absolute; background: white; border-radius: 100px; opacity: 0.8;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>filter: blur(2px); z-index: 1; animation: cloud-move infinite linear;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.cloud::after, .cloud::before { content: ''; position: absolute; background: white; border-radius: 50%; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.cloud::after { width: 60%; height: 150%; top: -60%; left: 15%; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.cloud::before { width: 50%; height: 120%; top: -40%; left: 40%; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@keyframes cloud-move {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>from { transform: translateX(-250px); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>to { transform: translateX(calc(100vw + 250px)); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* --- 头部样式 --- */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.header-bg {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 15px; padding-top: calc(15px + env(safe-area-inset-top));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-bottom: 4px solid rgba(255,255,255,0.5); position: relative; z-index: 100;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* --- 地图核心区域 --- */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.route-map {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: relative; width: 94%; height: 220px; margin: 20px auto;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 35px; border: 6px solid white; display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center; padding: 0 50px; z-index: 10;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 30px rgba(0,0,0,0.1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.road-line { position: absolute; height: 16px; background: rgba(0, 0, 0, 0.1); border-radius: 20px; width: calc(100% - 100px); left: 50px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.road-progress { position: absolute; height: 16px; background: linear-gradient(90deg, #fcd34d, #f59e0b); border-radius: 20px; width: 0%; left: 50px; z-index: 2; transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 巴士样式 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>#bus {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: absolute; width: 110px; height: 75px; z-index: 50; top: 50%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transform: translate(-50%, -90%); filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cursor: grab;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>touch-action: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>user-select: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>/* 默认带有过渡效果，拖拽时通过JS移除 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>#bus:active { cursor: grabbing; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.signboard {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: absolute; background: #22c55e; color: white; padding: 4px 12px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 12px; font-size: 13px; bottom: 120%; left: 50%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transform: translateX(-50%); white-space: nowrap; box-shadow: 0 4px 0 #16a34a;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>pointer-events: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 城市节点 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.city-node { position: absolute; z-index: 20; display: flex; flex-direction: column; align-items: center; transform: translateX(-50%); pointer-events: none;}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.city-pin { width: 12px; height: 12px; background: white; border: 3px solid #3b82f6; border-radius: 50%; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.city-name { margin-top: 8px; font-size: 12px; font-weight: 900; color: #1e3a8a; background: rgba(255,255,255,0.9); padding: 1px 6px; border-radius: 8px; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* --- 任务卡片 --- */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.task-card {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: white; border-radius: 25px; padding: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 15px 30px rgba(0,0,0,0.1); display: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 90%; max-width: 380px; margin-top: 10px; z-index: 50;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.task-card.active { display: block; animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@keyframes pop-in { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-submit { background: #f97316; color: white; padding: 10px 20px; border-radius: 12px; font-weight: bold; box-shadow: 0 4px 0 #c2410c; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-submit:active { transform: translateY(2px); box-shadow: 0 2px 0 #c2410c; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* --- 反馈弹窗与特效 --- */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.success-overlay {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: fixed; inset: 0; background: rgba(0,0,0,0.7);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: none; flex-direction: column; align-items: center; justify-content: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>z-index: 1000; backdrop-filter: blur(4px);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.success-overlay.show { display: flex; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>#confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1100; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.step-dot { width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; transition: all 0.3s; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.step-dot.active { background: #3b82f6; transform: scale(1.4); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.step-dot.done { background: #22c55e; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>#music-toggle {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: fixed; bottom: 30px; right: 30px; z-index: 2000;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: white; width: 50px; height: 50px; border-radius: 50%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex; align-items: center; justify-content: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 6px 15px rgba(0,0,0,0.2); cursor: pointer;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 24px; border: 3px solid #3b82f6;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: transform 0.2s;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>#music-toggle:active { transform: scale(0.9); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;!-- 点击页面任意位置尝试唤醒音频上下文 --&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body onclick="forceStartAudio()"&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 粒子画布 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;canvas id="confetti-canvas"&gt;&lt;/canvas&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 音乐开关 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="music-toggle" onclick="toggleMusic(event)"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;span id="music-icon"&gt;🔇&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 云朵背景动画 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="cloud" style="top: 10%; width: 150px; height: 45px; animation-duration: 45s; left: -10%;"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="cloud" style="top: 25%; width: 180px; height: 60px; animation-duration: 65s; animation-delay: -15s; left: 20%;"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 顶部标题与进度 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="header-bg text-center"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;h1 class="text-xl font-black text-blue-600 tracking-wide"&gt;🚌 小小里程师：云南路线大挑战&lt;/h1&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="flex justify-center gap-4 mt-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="step-dot active" id="dot-1"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="step-dot" id="dot-2"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 地图区域 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="route-map" id="map-area"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="road-line"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="road-progress" id="progress-bar"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- 城市坐标点 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="city-node" style="left: 50px;"&gt;&lt;div class="city-pin"&gt;&lt;/div&gt;&lt;div class="city-name"&gt;昆明(0)&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="city-node" style="left: 33.5%;"&gt;&lt;div class="city-pin"&gt;&lt;/div&gt;&lt;div class="city-name"&gt;楚雄(152)&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="city-node" style="left: 67%;"&gt;&lt;div class="city-pin"&gt;&lt;/div&gt;&lt;div class="city-name"&gt;大理(328)&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="city-node" style="left: calc(100% - 50px);"&gt;&lt;div class="city-pin"&gt;&lt;/div&gt;&lt;div class="city-name"&gt;丽江(524)&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- 可拖拽巴士 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="bus" style="left: 50px;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="signboard" id="bus-sign"&gt;里程：0 km&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;svg viewBox="0 0 110 70"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;rect x="5" y="12" width="100" height="42" rx="10" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;rect x="15" y="18" width="22" height="16" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;rect x="42" y="18" width="22" height="16" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;rect x="74" y="18" width="20" height="16" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1"/&gt;</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;!-- 乘客与司机细节 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;g transform="translate(18, 20)"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;circle cx="8" cy="8" r="5" fill="#fca5a5"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;path d="M3 5 Q8 0 13 5" fill="#4ade80" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;circle cx="6" cy="7" r="0.6" fill="#000"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;circle cx="10" cy="7" r="0.6" fill="#000"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/g&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;g transform="translate(46, 20)"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;circle cx="8" cy="8" r="5" fill="#fcd34d"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;path d="M3 8 Q8 2 13 8" fill="#ec4899" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;circle cx="6" cy="8" r="0.6" fill="#000"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;circle cx="10" cy="8" r="0.6" fill="#000"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/g&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;g transform="translate(77, 19)"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;circle cx="7" cy="7" r="4.5" fill="#fdba74"/&gt;<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;path d="M1 5 Q7 1 13 5" fill="#1e3a8a" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;circle cx="9" cy="6.5" r="0.8" fill="#1e293b"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;path d="M6 9 Q7.5 10 9 9" fill="none" stroke="#be123c" stroke-width="0.8"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/g&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;circle cx="28" cy="54" r="9" fill="#1e293b" /&gt;&lt;circle cx="28" cy="54" r="4" fill="#94a3b8" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;circle cx="82" cy="54" r="9" fill="#1e293b" /&gt;&lt;circle cx="82" cy="54" r="4" fill="#94a3b8" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 任务区域 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;main class="flex flex-col items-center"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- 任务 1 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="task-card active" id="card-1"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h2 class="font-black text-blue-600 mb-2 text-lg"&gt;第一关：路程挑战&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p class="text-gray-600 mb-4"&gt;从【楚雄】到【大理】要开多少公里？&lt;br&gt;&lt;span class="text-xs text-blue-400"&gt;提示：328 - 152 = ?&lt;/span&gt;&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="flex gap-3"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;input type="number" id="input-1" placeholder="???" autocomplete="off" class="flex-1 bg-blue-50 border-2 border-blue-100 rounded-xl px-4 py-2 text-xl font-bold text-center focus:outline-none focus:border-blue-400"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button onclick="checkAnswer(1, 176)" class="btn-submit"&gt;验证&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- 任务 2 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="task-card" id="card-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h2 class="font-black text-blue-600 mb-2 text-lg"&gt;第二关：终点挑战&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p class="text-gray-600 mb-4"&gt;从【大理】到【丽江】要开多少公里？&lt;br&gt;&lt;span class="text-xs text-blue-400"&gt;提示：524 - 328 = ?&lt;/span&gt;&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="flex gap-3"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;input type="number" id="input-2" placeholder="???" autocomplete="off" class="flex-1 bg-blue-50 border-2 border-blue-100 rounded-xl px-4 py-2 text-xl font-bold text-center focus:outline-none focus:border-blue-400"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button onclick="checkAnswer(2, 196)" class="btn-submit"&gt;验证&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 成功弹窗 --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="success-overlay" class="success-overlay"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="bg-white p-8 rounded-3xl text-center shadow-2xl mx-4 max-w-sm relative"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="mb-4 inline-block transform scale-125"&gt;🏆&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-blue-600 text-3xl font-black mb-2"&gt;太棒了！&lt;/h1&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p id="reward-text" class="text-gray-600 mb-8 font-bold"&gt;&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button id="overlay-btn" class="bg-blue-600 text-white px-10 py-3 rounded-full font-black text-lg shadow-lg active:scale-95 w-full"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>继续前进 ➔</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- 游戏状态 ---</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const state = {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>level: 1,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>totalKm: 524,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>audioInited: false,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>musicPlaying: true, // 默认开启</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>isDraggingBus: false,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>bgmLoopId: null</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- 音频系统 (8-bit 风格) ---</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let audioCtx, masterGain;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const melody = [261, 329, 392, 523, 392, 329, 440, 392]; // C4-E4-G4-C5 循环</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function forceStartAudio() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!state.audioInited) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>initAudio();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else if (audioCtx &amp;&amp; audioCtx.state === 'suspended') {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>audioCtx.resume();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function initAudio() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const AudioContext = window.AudioContext || window.webkitAudioContext;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (!AudioContext) return;</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>audioCtx = new AudioContext();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>masterGain = audioCtx.createGain();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>masterGain.connect(audioCtx.destination);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>masterGain.gain.value = 0.3; // 适当音量</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>state.audioInited = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (state.musicPlaying) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>document.getElementById('music-icon').innerText = '🎵';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>startBGM();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} catch (e) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>console.error("Audio init failed", e);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function playTone(freq, type, duration, volume = 0.2) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!audioCtx || audioCtx.state === 'suspended') return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const osc = audioCtx.createOscillator();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const g = audioCtx.createGain();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>osc.type = type;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>osc.frequency.setValueAtTime(freq, audioCtx.currentTime);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>g.gain.setValueAtTime(volume, audioCtx.currentTime);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>osc.connect(g);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>g.connect(masterGain);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>osc.start();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>osc.stop(audioCtx.currentTime + duration);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function startBGM() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (state.bgmLoopId) clearTimeout(state.bgmLoopId);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>let step = 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const loop = () =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (state.musicPlaying &amp;&amp; audioCtx &amp;&amp; audioCtx.state === 'running') {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>playTone(melody[step % melody.length], 'sine', 0.5, 0.05); // 柔和背景音</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>step++;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>state.bgmLoopId = setTimeout(loop, 450);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>loop();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function toggleMusic(e) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>e.stopPropagation();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!state.audioInited) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>initAudio();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>state.musicPlaying = !state.musicPlaying;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('music-icon').innerText = state.musicPlaying ? '🎵' : '🔇';</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (state.musicPlaying) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if(audioCtx.state === 'suspended') audioCtx.resume();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>startBGM();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- 拖拽与UI更新逻辑 ---</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const bus = document.getElementById('bus');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const mapArea = document.getElementById('map-area');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const progressBar = document.getElementById('progress-bar');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const busSign = document.getElementById('bus-sign');</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function updateBusUI(leftPx, skipTransition = false) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const rect = mapArea.getBoundingClientRect();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const padding = 50;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const roadWidth = rect.width - (padding * 2);</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>let x = Math.max(padding, Math.min(leftPx, rect.width - padding));</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 拖动时禁用过渡，保证跟随；自动移动时启用过渡</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (skipTransition) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>bus.style.transition = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>progressBar.style.transition = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>bus.style.transition = 'left 0.6s cubic-bezier(0.25, 1, 0.5, 1)';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>progressBar.style.transition = 'width 0.6s cubic-bezier(0.25, 1, 0.5, 1)';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>bus.style.left = x + 'px';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>let percent = ((x - padding) / roadWidth) * 100;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>progressBar.style.width = percent + '%';</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>let km = Math.round(state.totalKm * (percent / 100));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>busSign.innerText = `里程：${km} km`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 绑定拖拽事件</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>bus.addEventListener('mousedown', startDrag);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>bus.addEventListener('touchstart', startDrag, {passive: false});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function startDrag(e) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>forceStartAudio(); // 用户交互时尝试唤醒音频</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>state.isDraggingBus = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>e.stopPropagation();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>window.addEventListener('mousemove', drag);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>window.addEventListener('touchmove', drag, {passive: false});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function drag(e) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!state.isDraggingBus) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const clientX = e.touches ? e.touches[0].clientX : e.clientX;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const mapRect = mapArea.getBoundingClientRect();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>updateBusUI(clientX - mapRect.left, true);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if(e.cancelable) e.preventDefault();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>window.addEventListener('mouseup', stopDrag);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>window.addEventListener('touchend', stopDrag);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function stopDrag() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!state.isDraggingBus) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>state.isDraggingBus = false;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 窗口大小改变时重置 Canvas</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>window.addEventListener('resize', () =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const canvas = document.getElementById('confetti-canvas');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>canvas.width = window.innerWidth;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>canvas.height = window.innerHeight;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- 游戏业务流程 ---</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function checkAnswer(lvl, correct) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>forceStartAudio();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const input = document.getElementById(`input-${lvl}`);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const val = parseInt(input.value);</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (val === correct) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>// 正确音效</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>playTone(880, 'square', 0.1, 0.1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; playTone(1320, 'square', 0.3, 0.1), 80);</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (lvl === 1) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>showOverlay("第一阶段完成！巴士正在前往大理！");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>moveToPercent(67); // 移动到大理</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>showOverlay("终点抵达！你已经成为一名优秀的里程师！");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>moveToPercent(100); // 移动到丽江</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>document.getElementById('overlay-btn').innerText = "重新挑战 ➔";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>// 错误音效</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>playTone(150, 'sawtooth', 0.4, 0.15);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const card = document.getElementById(`card-${lvl}`);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>card.style.animation = 'shake 0.4s';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; card.style.animation = '', 400);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function moveToPercent(percent) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const rect = mapArea.getBoundingClientRect();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const padding = 50;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const roadWidth = rect.width - (padding * 2);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const targetX = padding + (roadWidth * (percent / 100));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>updateBusUI(targetX);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function showOverlay(msg) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('reward-text').innerText = msg;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('success-overlay').classList.add('show');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>createConfetti();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById('overlay-btn').onclick = () =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>forceStartAudio();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('success-overlay').classList.remove('show');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (state.level === 2) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>resetGame();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>// 关卡切换到 2</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(`dot-${state.level}`).classList.add('done');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(`card-${state.level}`).classList.remove('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>state.level++;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(`dot-${state.level}`).classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(`card-${state.level}`).classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function resetGame() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 重置状态</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>state.level = 1;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('overlay-btn').innerText = "继续前进 ➔";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('input-1').value = "";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('input-2').value = "";</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 重置点状进度</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>for(let i=1; i&lt;=2; i++) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(`dot-${i}`).classList.remove('active', 'done');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(`card-${i}`).classList.remove('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('dot-1').classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('card-1').classList.add('active');</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 巴士归位 (需要等待一小段时间让 transition 生效或强制重绘，这里直接利用 updateUI 逻辑)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>moveToPercent(0);<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- 撒花特效 ---</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const canvas = document.getElementById('confetti-canvas');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const ctx = canvas.getContext('2d');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let particles = [];</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function createConfetti() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>canvas.width = window.innerWidth;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>canvas.height = window.innerHeight;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>particles = [];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt; 80; i++) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>particles.push({</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>x: canvas.width / 2, y: canvas.height / 2,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15 - 5,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>size: Math.random() * 8 + 4,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>color: `hsl(${Math.random() * 360}, 80%, 60%)`,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>gravity: 0.3, life: 1.0</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const anim = () =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>ctx.clearRect(0, 0, canvas.width, canvas.height);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>particles.forEach((p, i) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>p.vy += p.gravity; p.x += p.vx; p.y += p.vy; p.life -= 0.015;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>ctx.globalAlpha = p.life; ctx.fillStyle = p.color;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>ctx.beginPath();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>ctx.arc(p.x, p.y, p.size/2, 0, Math.PI*2);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>ctx.fill();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (p.life &lt;= 0) particles.splice(i, 1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (particles.length &gt; 0) requestAnimationFrame(anim);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>anim();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 错误抖动动画样式</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const s = document.createElement('style');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>s.innerHTML = `@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.head.appendChild(s);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
