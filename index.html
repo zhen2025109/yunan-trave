@@ -28,6 +28,11 @@
         .cloud {
             position: absolute; background: white; border-radius: 100px; opacity: 0.6;
             filter: blur(2px); z-index: 1; pointer-events: none;
+            animation: cloudMove linear infinite;
+        }
+        @keyframes cloudMove {
+            from { transform: translateX(-150px); }
+            to { transform: translateX(100vw); }
         }
 
         .header-bg {
@@ -48,7 +53,7 @@
         .road-progress { position: absolute; height: 12px; background: linear-gradient(90deg, #fcd34d, #f59e0b); border-radius: 20px; width: 0%; left: 40px; z-index: 2; transition: width 0.3s ease-out; }
 
         #bus {
-            position: absolute; width: 100px; height: 80px; z-index: 50; top: 50%;
+            position: absolute; width: 110px; height: 85px; z-index: 50; top: 50%;
             transform: translate(-50%, -85%); filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
             cursor: grab; touch-action: none;
             will-change: left;
@@ -105,14 +110,25 @@
             font-size: 24px; border: 3px solid #3b82f6;
         }
 
+        .trophy-anim {
+            animation: trophy-bounce 0.8s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes trophy-bounce {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+            50% { transform: translateY(-15px) scale(1.1) rotate(5deg); }
+        }
+
         @keyframes pop-in { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-8px)} 80%{transform:translateX(8px)} }
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body>
+<body onclick="unlockAudio()">
 
     <canvas id="confetti-canvas"></canvas>
+
+    <div class="cloud" style="top: 15%; width: 100px; height: 30px; animation-duration: 30s;"></div>
+    <div class="cloud" style="top: 30%; width: 140px; height: 40px; animation-duration: 45s; animation-delay: -10s;"></div>
 
     <div id="music-toggle">
         <span id="music-icon">🔇</span>
@@ -120,9 +136,9 @@
 
     <div class="header-bg text-center">
         <h1 class="text-lg font-black text-blue-600 tracking-wide">🚌 小小里程师：云南大挑战</h1>
-        <div class="flex justify-center gap-3 mt-2">
-            <div class="w-3 h-3 rounded-full bg-blue-600 transition-colors duration-500" id="dot-1"></div>
-            <div class="w-3 h-3 rounded-full bg-gray-200 transition-colors duration-500" id="dot-2"></div>
+        <div class="flex justify-center gap-3 mt-2" id="step-indicator">
+            <div class="w-3 h-3 rounded-full bg-blue-600 transition-colors" id="dot-1"></div>
+            <div class="w-3 h-3 rounded-full bg-gray-200 transition-colors" id="dot-2"></div>
         </div>
     </div>
 
@@ -137,15 +153,44 @@
 
         <div id="bus" style="left: 40px;">
             <div class="signboard" id="bus-sign">里程：0 km</div>
-            <svg viewBox="0 0 110 70">
-                <rect x="5" y="12" width="100" height="42" rx="10" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2"/>
-                <rect x="15" y="18" width="22" height="16" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1"/>
-                <rect x="42" y="18" width="22" height="16" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1"/>
-                <rect x="74" y="18" width="20" height="16" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1"/>
-                <g transform="translate(18, 20)"><circle cx="8" cy="8" r="5" fill="#fca5a5"/><circle cx="6" cy="7" r="0.6" fill="#000"/><circle cx="10" cy="7" r="0.6" fill="#000"/></g>
-                <g transform="translate(46, 20)"><circle cx="8" cy="8" r="5" fill="#fcd34d"/><circle cx="6" cy="8" r="0.6" fill="#000"/><circle cx="10" cy="8" r="0.6" fill="#000"/></g>
-                <circle cx="28" cy="54" r="9" fill="#1e293b" /><circle cx="28" cy="54" r="4" fill="#94a3b8" />
-                <circle cx="82" cy="54" r="9" fill="#1e293b" /><circle cx="82" cy="54" r="4" fill="#94a3b8" />
+            <svg viewBox="0 0 110 80">
+                <rect x="5" y="15" width="100" height="45" rx="10" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2.5"/>
+                <rect x="15" y="22" width="22" height="18" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1.5"/>
+                <rect x="42" y="22" width="22" height="18" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1.5"/>
+                <rect x="74" y="22" width="22" height="18" rx="4" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="1.5"/>
+                <line x1="18" y1="25" x2="30" y2="37" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
+                <line x1="45" y1="25" x2="57" y2="37" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
+                <line x1="77" y1="25" x2="89" y2="37" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
+                <g transform="translate(18, 24)">
+                    <circle cx="8" cy="7" r="5" fill="#fca5a5" />
+                    <path d="M3 5 Q8 0 13 5" fill="#4ade80" />
+                    <circle cx="6" cy="7" r="0.6" fill="#000"/>
+                    <circle cx="10" cy="7" r="0.6" fill="#000"/>
+                </g>
+                <g transform="translate(45, 24)">
+                    <circle cx="8" cy="7" r="5" fill="#fcd34d" />
+                    <path d="M3 8 Q8 2 13 8" fill="#ec4899" />
+                    <circle cx="6" cy="7" r="0.6" fill="#000"/>
+                    <circle cx="10" cy="7" r="0.6" fill="#000"/>
+                </g>
+                <g transform="translate(77, 23)">
+                    <rect x="2" y="8" width="12" height="8" rx="2" fill="#1d4ed8" />
+                    <circle cx="8" cy="7" r="5.5" fill="#ffedd5" />
+                    <path d="M2.5 5 Q8 0 13.5 5" fill="#1e3a8a" />
+                    <circle cx="6" cy="7" r="0.7" fill="#000"/>
+                    <circle cx="10" cy="7" r="0.7" fill="#000"/>
+                    <path d="M6.5 9.5 Q8 11 9.5 9.5" fill="none" stroke="#ea580c" stroke-width="0.8" stroke-linecap="round"/>
+                    <circle cx="1" cy="8" r="2.5" fill="#ffedd5" />
+                </g>
+                <circle cx="102" cy="45" r="3" fill="#fde047" />
+                <g>
+                    <circle cx="28" cy="60" r="10" fill="#1e293b" />
+                    <circle cx="28" cy="60" r="4.5" fill="#94a3b8" />
+                </g>
+                <g>
+                    <circle cx="82" cy="60" r="10" fill="#1e293b" />
+                    <circle cx="82" cy="60" r="4.5" fill="#94a3b8" />
+                </g>
             </svg>
         </div>
     </div>
@@ -173,15 +218,27 @@
     </main>
 
     <div id="success-overlay" class="success-overlay">
-        <div class="bg-white p-6 rounded-3xl text-center shadow-2xl mx-6 max-w-sm">
-            <h1 class="text-blue-600 text-2xl font-black mb-2">🎉 太棒了！</h1>
+        <div class="bg-white p-6 rounded-3xl text-center shadow-2xl mx-6 max-w-sm relative overflow-hidden">
+            <div class="mb-4 flex justify-center">
+                <div class="trophy-anim w-24 h-24">
+                    <svg viewBox="0 0 100 100">
+                        <path d="M30 30 Q20 30 20 40 Q20 50 30 50" fill="none" stroke="#fcd34d" stroke-width="4"/>
+                        <path d="M70 30 Q80 30 80 40 Q80 50 70 50" fill="none" stroke="#fcd34d" stroke-width="4"/>
+                        <path d="M30 20 H70 V55 Q70 75 50 75 Q30 75 30 55 Z" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                        <rect x="40" y="75" width="20" height="10" fill="#d97706" />
+                        <rect x="30" y="85" width="40" height="8" rx="4" fill="#92400e" />
+                        <circle cx="50" cy="45" r="8" fill="#fef3c7" opacity="0.5" />
+                        <path d="M45 45 L50 40 L55 45 L50 50 Z" fill="#fff" />
+                    </svg>
+                </div>
+            </div>
+            <h1 class="text-blue-600 text-2xl font-black mb-2" id="success-title">🎉 太棒了！</h1>
             <p id="reward-text" class="text-gray-600 mb-6 font-bold leading-relaxed"></p>
             <button id="overlay-btn" class="bg-blue-600 text-white px-8 py-3 rounded-full font-black text-lg shadow-lg active:scale-95 w-full">继续前进 ➔</button>
         </div>
     </div>
 
     <script>
-        // 使用更具唯一性的名称防止 identifier 冲突
         const APP_STATE = {
             level: 1,
             totalKm: 524,
@@ -189,10 +246,9 @@
             musicPlaying: false,
             isDragging: false,
             lastVisitedNode: -1,
-            bgmTimeout: null,
             audioCtx: null,
             masterGain: null,
-            melodyIndex: 0
+            bgmLoopId: null
         };
 
         const DOM_ELEMENTS = {
@@ -204,21 +260,11 @@
             overlay: document.getElementById('success-overlay')
         };
 
-        // 修改变量名以防止报错
-        const NOTE_FREQS = {
-            C4: 261.63, CS4: 277.18, D4: 293.66, DS4: 311.13, E4: 329.63, F4: 349.23, FS4: 369.99, G4: 392.00, GS4: 415.30, A4: 440.00, AS4: 466.16, B4: 493.88,
-            C5: 523.25, CS5: 554.37, D5: 587.33, DS5: 622.25, E5: 659.25, F5: 698.46, FS5: 739.99, G5: 783.99, GS5: 830.61, A5: 880.00, AS5: 932.33, B5: 987.77,
-            G4_LOW: 392.00, G5_HI: 783.99, C6: 1046.50
-        };
-
-        const MARIO_MELODY = [
-            // 开场
-            { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 50 }, { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 150 }, 
-            { f: NOTE_FREQS.C5, d: 150 }, { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.G5, d: 150 }, { f: 0, d: 450 }, { f: NOTE_FREQS.G4, d: 150 }, { f: 0, d: 450 },
-            // A段
-            { f: NOTE_FREQS.C5, d: 150 }, { f: 0, d: 300 }, { f: NOTE_FREQS.G4, d: 150 }, { f: 0, d: 300 }, { f: NOTE_FREQS.E4, d: 150 }, { f: 0, d: 300 }, 
-            { f: NOTE_FREQS.A4, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.B4, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.AS4, d: 150 }, { f: NOTE_FREQS.A4, d: 150 }, { f: 0, d: 150 },
-            { f: NOTE_FREQS.G4, d: 100 }, { f: NOTE_FREQS.E5, d: 100 }, { f: NOTE_FREQS.G5, d: 100 }, { f: NOTE_FREQS.A5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.F5, d: 150 }, { f: NOTE_FREQS.G5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.E5, d: 150 }, { f: 0, d: 150 }, { f: NOTE_FREQS.C5, d: 150 }, { f: NOTE_FREQS.D5, d: 150 }, { f: NOTE_FREQS.B4, d: 150 }, { f: 0, d: 300 }
+        const MARIO_THEME = [
+            [659, 100, 150], [659, 100, 300], [659, 100, 300], [523, 100, 100], [659, 100, 300], [784, 100, 550], [392, 100, 575],
+            [523, 100, 450], [392, 100, 400], [330, 100, 400], [440, 100, 300], [494, 100, 330], [466, 100, 150], [440, 100, 300],
+            [392, 100, 200], [659, 100, 200], [784, 100, 200], [880, 100, 300], [698, 100, 150], [784, 100, 300],
+            [659, 100, 300], [523, 100, 150], [587, 100, 150], [494, 100, 500]
         ];
 
         function initAudioEngine() {
@@ -228,51 +274,57 @@
                 APP_STATE.audioCtx = new AudioContext();
                 APP_STATE.masterGain = APP_STATE.audioCtx.createGain();
                 APP_STATE.masterGain.connect(APP_STATE.audioCtx.destination);
-                APP_STATE.masterGain.gain.value = 0.15;
+                // 调大默认音量 (从 0.12 调至 0.4)
+                APP_STATE.masterGain.gain.value = 0.4;
                 APP_STATE.isAudioInited = true;
                 APP_STATE.musicPlaying = true;
                 DOM_ELEMENTS.musicIcon.innerText = '🎵';
-                runBGM();
+                startBGM();
             } catch (e) { console.error("音频启动失败", e); }
         }
 
-        function playSynthTone(freq, duration, volume = 0.1) {
-            if (!APP_STATE.isAudioInited || APP_STATE.audioCtx.state === 'suspended' || freq === 0) return;
+        function unlockAudio() {
+            if (!APP_STATE.isAudioInited) {
+                initAudioEngine();
+            } else if (APP_STATE.audioCtx.state === 'suspended') {
+                APP_STATE.audioCtx.resume();
+            }
+        }
+
+        function playSynthTone(freq, duration, volume = 0.1, type = 'square') {
+            if (!APP_STATE.isAudioInited || APP_STATE.audioCtx.state === 'suspended') return;
             const osc = APP_STATE.audioCtx.createOscillator();
             const g = APP_STATE.audioCtx.createGain();
-            osc.type = 'square';
+            osc.type = type;
             osc.frequency.setValueAtTime(freq, APP_STATE.audioCtx.currentTime);
-            
             g.gain.setValueAtTime(volume, APP_STATE.audioCtx.currentTime);
             g.gain.exponentialRampToValueAtTime(0.0001, APP_STATE.audioCtx.currentTime + (duration/1000));
-            
             osc.connect(g);
             g.connect(APP_STATE.masterGain);
             osc.start();
             osc.stop(APP_STATE.audioCtx.currentTime + (duration/1000));
         }
 
-        function playCoinEffect() {
-            playSynthTone(987, 100, 0.2);
-            setTimeout(() => playSynthTone(1318, 300, 0.2), 80);
+        function startBGM() {
+            let noteIdx = 0;
+            const playNextNote = () => {
+                if (!APP_STATE.musicPlaying || APP_STATE.audioCtx.state !== 'running') {
+                    APP_STATE.bgmLoopId = setTimeout(playNextNote, 500);
+                    return;
+                }
+
+                const [freq, dur, wait] = MARIO_THEME[noteIdx];
+                playSynthTone(freq, dur, 0.12, 'triangle');
+                
+                noteIdx = (noteIdx + 1) % MARIO_THEME.length;
+                APP_STATE.bgmLoopId = setTimeout(playNextNote, wait);
+            };
+            playNextNote();
         }
 
-        function runBGM() {
-            if (APP_STATE.bgmTimeout) clearTimeout(APP_STATE.bgmTimeout);
-            
-            const next = () => {
-                if (APP_STATE.musicPlaying && APP_STATE.isAudioInited) {
-                    const note = MARIO_MELODY[APP_STATE.melodyIndex];
-                    if (note.f > 0) {
-                        playSynthTone(note.f, note.d, 0.08);
-                    }
-                    APP_STATE.melodyIndex = (APP_STATE.melodyIndex + 1) % MARIO_MELODY.length;
-                    APP_STATE.bgmTimeout = setTimeout(next, note.d);
-                } else {
-                    APP_STATE.bgmTimeout = setTimeout(next, 500);
-                }
-            };
-            next();
+        function playCoinEffect() {
+            playSynthTone(987, 100, 0.25, 'square');
+            setTimeout(() => playSynthTone(1318, 300, 0.25, 'square'), 80);
         }
 
         function getLayout() {
@@ -296,13 +348,11 @@
             let activeId = -1;
             nodes.forEach((pos, i) => {
                 const nodeX = padding + pos * roadWidth;
-                const dist = Math.abs(x - nodeX);
-                const el = document.getElementById(`node-${i}`);
-                if (dist < 15) {
-                    el.classList.add('highlight');
+                if (Math.abs(x - nodeX) < 15) {
+                    document.getElementById(`node-${i}`).classList.add('highlight');
                     activeId = i;
                 } else {
-                    el.classList.remove('highlight');
+                    document.getElementById(`node-${i}`).classList.remove('highlight');
                 }
             });
 
@@ -315,8 +365,7 @@
         }
 
         const onStart = (e) => {
-            initAudioEngine();
-            if (APP_STATE.audioCtx.state === 'suspended') APP_STATE.audioCtx.resume();
+            unlockAudio();
             APP_STATE.isDragging = true;
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             refreshUI(clientX);
@@ -338,13 +387,13 @@
 
         document.getElementById('music-toggle').onclick = (e) => {
             e.stopPropagation();
-            initAudioEngine();
+            unlockAudio();
             APP_STATE.musicPlaying = !APP_STATE.musicPlaying;
             DOM_ELEMENTS.musicIcon.innerText = APP_STATE.musicPlaying ? '🎵' : '🔇';
         };
 
         function validate(lvl, correct) {
-            initAudioEngine();
+            unlockAudio();
             const input = document.getElementById(`input-${lvl}`);
             const feedback = document.getElementById(`feedback-${lvl}`);
             const val = parseInt(input.value);
@@ -353,14 +402,16 @@
                 feedback.classList.remove('show');
                 playCoinEffect();
                 if (lvl === 1) {
-                    showDialog("第一阶段完成！巴士正在前往大理！");
+                    showDialog("成功！巴士正在前往大理！", "第一阶段完成！");
                     autoDrive(0.67);
                 } else {
-                    showDialog("终点抵达！你已经完成全部里程挑战！");
+                    showDialog("太棒了！你已经完成了全程挑战！", "冠军里程师！");
                     autoDrive(1.0);
+                    document.getElementById('overlay-btn').innerText = "重新开始";
                 }
             } else {
                 feedback.classList.add('show');
+                playSynthTone(150, 400, 0.3, 'sawtooth');
             }
         }
 
@@ -376,7 +427,8 @@
             }, 1000);
         }
 
-        function showDialog(msg) {
+        function showDialog(msg, title) {
+            document.getElementById('success-title').innerText = title || "🎉 太棒了！";
             document.getElementById('reward-text').innerText = msg;
             DOM_ELEMENTS.overlay.classList.add('show');
             launchConfetti();
@@ -384,30 +436,33 @@
 
         function reset() {
             APP_STATE.level = 1;
-            APP_STATE.lastVisitedNode = -1;
-            document.getElementById('dot-1').classList.replace('bg-green-500', 'bg-blue-600');
-            document.getElementById('dot-2').classList.replace('bg-blue-600', 'bg-gray-200');
+            document.getElementById('dot-1').className = 'w-3 h-3 rounded-full bg-blue-600';
+            document.getElementById('dot-2').className = 'w-3 h-3 rounded-full bg-gray-200';
             document.getElementById('card-1').classList.add('active');
             document.getElementById('card-2').classList.remove('active');
             document.getElementById('input-1').value = '';
             document.getElementById('input-2').value = '';
+            document.getElementById('overlay-btn').innerText = "继续前进 ➔";
             autoDrive(0);
             DOM_ELEMENTS.overlay.classList.remove('show');
         }
 
         document.getElementById('submit-1').onclick = () => validate(1, 176);
         document.getElementById('submit-2').onclick = () => validate(2, 196);
+
         document.getElementById('overlay-btn').onclick = () => {
+            unlockAudio();
             if (APP_STATE.level === 1) {
                 APP_STATE.level = 2;
                 document.getElementById('dot-1').classList.replace('bg-blue-600', 'bg-green-500');
                 document.getElementById('dot-2').classList.replace('bg-gray-200', 'bg-blue-600');
                 document.getElementById('card-1').classList.remove('active');
                 document.getElementById('card-2').classList.add('active');
-                DOM_ELEMENTS.overlay.classList.remove('show');
             } else {
                 reset();
+                return;
             }
+            DOM_ELEMENTS.overlay.classList.remove('show');
         };
 
         function launchConfetti() {
